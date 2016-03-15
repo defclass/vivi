@@ -34,8 +34,7 @@
        (apply str)))
 
 (defn write [measurement fields values & [time]]
-  (-> @(client/post (write-url) {:body (data->plain measurement fields values time)})
-      :status))
+  (-> @(client/post (write-url) {:body (data->plain measurement fields values time)})))
 
 (defn query [sql]
   (let [url (query-url)]
