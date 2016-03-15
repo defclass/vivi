@@ -13,10 +13,12 @@ Vivi is distributed via Clojars. Add the following to your dependencies in proje
 ### Require in your app
 `(require '[vivi.core :as v])`
 
-### Configure 
+### Configure
 
-` (v/set-config 
-    {:url "http://127.0.0.1:8086" :db "mydb"})`
+` (v/set-config
+    {:influxdb
+        {:url "http://127.0.0.1:8086"
+        :db "mydb"}})`
 
 ### Write data to influxdb
 
@@ -26,7 +28,7 @@ Vivi is distributed via Clojars. Add the following to your dependencies in proje
 
 ```
 
-### Query 
+### Query
 ```clojure
     (v/query "select * from cpu")
     ;; => {:series [{:name "cpu",

@@ -6,19 +6,22 @@
             [cheshire.core :refer [parse-string]]))
 
 (defonce +default-config+
-  {:url "http://127.0.0.1:8086"
-   :db "mydb"})
+  {:influxdb {:url "http://127.0.0.1:8086"
+              :db "mydb"}})
 
 (alter-var-root #'env merge +default-config+)
 
 (defn set-config [m]
   (alter-var-root #'env merge m))
 
+(defn get-inf-cfg []
+  (:influxdb env))
+
 (defn write-url []
-  (str (:url env)  "/write?db=" (:db env)))
+  (str (:url (get-inf-cfg))  "/write?db=" (:db (get-inf-cfg))))
 
 (defn query-url []
-  (str (:url env) "/query"))
+  (str (:url (get-inf-cfg)) "/query"))
 
 (defn- prepare-data [m]
   (->> (walk/stringify-keys m)
@@ -37,6 +40,6 @@
 (defn query [sql]
   (let [url (query-url)]
     (-> @(client/get url
-                     {:query-params {"db" (:db env) "q" sql}})
+                     {:query-params {"db" (:db (get-inf-cfg)) "q" sql}})
         :body (parse-string true)
         :results first)))
