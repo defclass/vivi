@@ -45,7 +45,9 @@
                (.contains (keys data) :q)) "Data is a map and must have key :q .")
   (let [url (query-url)]
     (-> @(client/get url {:query-params data})
-        :body (parse-string true))))
+        :body (parse-string true)
+        (#(if-let [result (:results %)]
+            result %)))))
 
 (defn create-db [db]
   (query {:q (format "create database %s" (name db))}))
