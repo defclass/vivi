@@ -26,8 +26,9 @@
        (map #(str/join "=" %))
        (str/join ",")))
 
-(defn- data->plain [{:keys [measurement fields values time]}]
-  (->> (filter identity [measurement "," (prepare-data fields) " " (prepare-data values) " " time])
+(defn- data->plain [{:keys [measurement tags fields time]}]
+  (assert (and measurement tags fields) "measurement, tags, fields keys must in data.")
+  (->> (filter identity [measurement "," (prepare-data tags) " " (prepare-data fields) " " time])
        (filter identity)
        (apply str)))
 
@@ -39,8 +40,15 @@
     (-> @(client/post (write-url db) {:body body})
         (select-keys [:status :body]))))
 
-(defn query [db q]
+(defn query [data]
+  (assert (and (map? data)
+               (.contains (keys data) :q)) "Data is a map and must have key :q .")
   (let [url (query-url)]
-    (-> @(client/get url {:query-params {"db" db "q" q}})
-        :body (parse-string true)
-        :results)))
+    (-> @(client/get url {:query-params data})
+        :body (parse-string true))))
+
+(defn create-db [db]
+  (query {:q (format "create database %s" (name db))}))
+
+(defn delete-db [db]
+  (query {:q (format "drop database %s" (name db))}))

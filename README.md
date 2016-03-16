@@ -24,8 +24,8 @@ Write a record:
 ```clojure
  (v/write "mydb"
     {:measurement "cpu"
-     :fields {:tag-1 "tag-1" :tag-2 "tag-2"}
-     :values {:value1 1 :value2 2}})
+     :tags {:tag-1 "tag-1" :tag-2 "tag-2"}
+     :fields {:value1 1 :value2 2}})
  ;;=> {:body "",
  ;;    :status 204}
 ```
@@ -34,11 +34,11 @@ Write records:
 
 ```clojure
  (v/write "mydb" [{:measurement "cpu"
-                   :fields {:tag-1 "tag-1" :tag-2 "tag-2"}
-                   :values {:value1 1 :value2 2}}
+                   :tags {:tag-1 "tag-1" :tag-2 "tag-2"}
+                   :fields {:value1 1 :value2 2}}
                    {:measurement "cpu"
-                    :fields {:tag-1 "tag-1" :tag-2 "tag-2"}
-                    :values {:value1 3 :value2 4}}])
+                    :tags {:tag-1 "tag-1" :tag-2 "tag-2"}
+                    :fields {:value1 3 :value2 4}}])
  ;;=> {:body "",
  ;;    :status 204}
 ```
@@ -46,7 +46,8 @@ Write records:
 
 ### Query
 ```clojure
-    (v/query "mydb" "select * from cpu"})
+    (v/query {:db "mydb" 
+              :q "select * from cpu"})
     ;; => {:series [{:name "cpu",
     ;;               :columns ["time" "tag-1" "tag-2" "value1" "value2"],
     ;;               :values [["2016-03-14T15:19:48.904649855Z" "tag-1" "tag-2" 1 2]
