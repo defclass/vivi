@@ -37,11 +37,10 @@
                (str/join " \n " (map data->plain data))
                (data->plain data))]
     (-> @(client/post (write-url db) {:body body})
-        (select-keys [:body :status]))))
+        (select-keys [:status :body]))))
 
 (defn query [db q]
   (let [url (query-url)]
-    (-> @(client/get url
-                     {:query-params {"db" db "q" q}})
+    (-> @(client/get url {:query-params {"db" db "q" q}})
         :body (parse-string true)
         :results)))
