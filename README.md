@@ -27,7 +27,7 @@ Write a record:
      :fields {:tag-1 "tag-1" :tag-2 "tag-2"}
      :values {:value1 1 :value2 2}})
  ;;=> {:body "",
-       :status 204}
+ ;;    :status 204}
 ```
 
 Write records:
@@ -40,7 +40,7 @@ Write records:
                     :fields {:tag-1 "tag-1" :tag-2 "tag-2"}
                     :values {:value1 3 :value2 4}}])
  ;;=> {:body "",
-       :status 204}
+ ;;    :status 204}
 ```
 
 
