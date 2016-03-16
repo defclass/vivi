@@ -28,7 +28,7 @@
 
 (defn- data->plain [{:keys [measurement tags fields time]}]
   (assert (and measurement tags fields) "measurement, tags, fields keys must in data.")
-  (->> (filter identity [measurement "," (prepare-data tags) " " (prepare-data fields) " " time])
+  (->> [measurement "," (prepare-data tags) " " (prepare-data fields) " " time]
        (filter identity)
        (apply str)))
 
