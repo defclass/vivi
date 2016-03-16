@@ -5,20 +5,18 @@
             [clojure.walk :as walk]
             [cheshire.core :refer [parse-string]]))
 
-(defonce +default-config+
-  {:influxdb {:url "http://127.0.0.1:8086"
-              :db "mydb"}})
+(defonce +default-config+ {:url "http://127.0.0.1:8086"})
 
-(alter-var-root #'env merge +default-config+)
+(alter-var-root #'env merge {:influxdb +default-config+})
 
 (defn set-config [m]
-  (alter-var-root #'env merge m))
+  (alter-var-root #'env merge {:influxdb m}))
 
 (defn get-inf-cfg []
   (:influxdb env))
 
-(defn write-url []
-  (str (:url (get-inf-cfg))  "/write?db=" (:db (get-inf-cfg))))
+(defn write-url [db]
+  (str (:url (get-inf-cfg))  "/write?db=" db))
 
 (defn query-url []
   (str (:url (get-inf-cfg)) "/query"))
@@ -28,17 +26,22 @@
        (map #(str/join "=" %))
        (str/join ",")))
 
-(defn- data->plain [measurement fields values & [time]]
-  (->> [measurement "," (prepare-data fields) " " (prepare-data values) " " time]
+(defn- data->plain [{:keys [measurement fields values time]}]
+  (->> (filter identity [measurement "," (prepare-data fields) " " (prepare-data values) " " time])
        (filter identity)
        (apply str)))
 
-(defn write [measurement fields values & [time]]
-  (-> @(client/post (write-url) {:body (data->plain measurement fields values time)})))
+(defn write [db data]
+  (assert (or (map? data) (vector? data)) "Write data need be map or vector.")
+  (let [body (if (vector? data)
+               (str/join " \n " (map data->plain data))
+               (data->plain data))]
+    (-> @(client/post (write-url db) {:body body})
+        (select-keys [:body :status]))))
 
-(defn query [sql]
+(defn query [db q]
   (let [url (query-url)]
     (-> @(client/get url
-                     {:query-params {"db" (:db (get-inf-cfg)) "q" sql}})
+                     {:query-params {"db" db "q" q}})
         :body (parse-string true)
-        :results first)))
+        :results)))
