@@ -1,4 +1,4 @@
-(defproject defclass/vivi "0.1.0-SNAPSHOT"
+(defproject defclass/vivi "0.1.0"
   :description "A Clojure client for InfluxDB"
   :url "https://github.com/defclass/vivi"
   :license {:name "Eclipse Public License"

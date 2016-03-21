@@ -6,7 +6,7 @@ A Clojure client for InfluxDB.
 
 Vivi is distributed via Clojars. Add the following to your dependencies in project.clj:
 
-`:dependencies [[defclass/vivi "0.1.0-SNAPSHOT"]]`
+`:dependencies [[defclass/vivi "0.1.0"]]`
 
 ## Usage
 
