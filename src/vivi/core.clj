@@ -7,7 +7,7 @@
 
 (defonce +default-config+ {:url "http://127.0.0.1:8086"})
 
-(alter-var-root #'env merge {:influxdb +default-config+})
+(alter-var-root #'env #(merge {:influxdb +default-config+} %))
 
 (defn set-config [m]
   (alter-var-root #'env merge {:influxdb m}))
