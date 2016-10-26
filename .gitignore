@@ -2,3 +2,4 @@
 .idea/
 target/
 .nrepl-port
+.lein-repl-history
