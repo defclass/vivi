@@ -50,7 +50,7 @@
   (cond
     (string? v)
     (do (check-string! v)
-        (format "\"%s\"" v))
+        (pr-str v))
 
     (= (class v) java.lang.Boolean) (str v)
 
