@@ -27,11 +27,11 @@
 ; key: Don't need quote.
 ; field value:
 ;   String need quote by ` " `.
-;   Bool don't need quote.
-;   Number don't need quote.
+;   Bool don't need to quote.
+;   Number don't need to quote.
 ;
 ; tag value:
-;   String don't need quote.
+;   String don't need to quote.
 
 
 
@@ -109,8 +109,8 @@
 ; key: Quoted by ` " `
 ; field value:
 ;   String quoted by ` ' `.
-;   Bool don't need quote.
-;   Number don't need quote.
+;   Bool don't need to quote.
+;   Number don't need to quote.
 ;
 ; tag value:
 ;   String quoted by ` ' `.
